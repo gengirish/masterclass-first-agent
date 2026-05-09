@@ -1,0 +1,27 @@
+# Fly.io app config. Rename `app` to a globally-unique name before `fly deploy`.
+# Run `fly launch --copy-config --no-deploy` to let the CLI generate a unique
+# app name automatically and replace this stub.
+
+app = "my-first-agent-CHANGEME"
+primary_region = "bom"
+
+[build]
+  dockerfile = "deploy/Dockerfile"
+
+[env]
+  MODEL = "gpt-4o-mini"
+  EMBED_MODEL = "text-embedding-3-small"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
