@@ -31,30 +31,44 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
     """Run the agent loop until it returns a final answer or budget runs out."""
     client = make_client(MODEL)
 
-    # TODO 1 - initialize messages with the system prompt and the user's question.
-    # Hint: messages is a list of dicts. Each dict has a "role" and "content" key.
-    messages: list[dict[str, Any]] = ...  # replace this
+    messages: list[dict[str, Any]] = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": user_message},
+    ]
 
     for iteration in range(max_iterations):
         print(f"\n--- iteration {iteration + 1} ---")
 
-        # TODO 2 - call the LLM with the tools registered.
-        # Hint: client.chat.completions.create(model=model_name(MODEL), messages=..., tools=TOOLS, tool_choice="auto")
-        response = ...  # replace this
+        response = client.chat.completions.create(
+            model=model_name(MODEL),
+            messages=messages,
+            tools=TOOLS,
+            tool_choice="auto",
+        )
 
         choice = response.choices[0].message
         messages.append(choice.model_dump(exclude_none=True))
 
-        # TODO 3 - if the LLM wants to call a tool, run it and loop back.
-        # Hint: choice.tool_calls is a list. Each item has .id, .function.name,
-        # .function.arguments (a JSON string). Use dispatch_tool(name, args).
-        # Append a {"role": "tool", "tool_call_id": ..., "name": ..., "content": ...}
-        # message for each tool call, then `continue`.
         if choice.tool_calls:
-            ...  # replace this
+            for tool_call in choice.tool_calls:
+                name = tool_call.function.name
+                args = json.loads(tool_call.function.arguments)
+                print(f"  -> tool: {name}({args})")
+
+                result = dispatch_tool(name, args)
+                preview = result[:120] + ("..." if len(result) > 120 else "")
+                print(f"  <- result: {preview}")
+
+                messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tool_call.id,
+                        "name": name,
+                        "content": result,
+                    }
+                )
             continue
 
-        # TODO 4 - no more tool calls => the LLM is done. Return its text.
         return choice.content or ""
 
     return "Agent ran out of iterations without producing a final answer."
