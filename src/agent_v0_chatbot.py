@@ -10,18 +10,19 @@ import os
 import sys
 
 from dotenv import load_dotenv
-from openai import OpenAI
+
+from .llm import make_client, model_name
 
 load_dotenv()
 
-MODEL = os.environ.get("MODEL", "gpt-4o-mini")
+MODEL = os.environ.get("MODEL", "openai/gpt-4o-mini")
 
 
 def chat(user_message: str) -> str:
     """Send a single message to the LLM and return the reply."""
-    client = OpenAI()
+    client = make_client(MODEL)
     response = client.chat.completions.create(
-        model=MODEL,
+        model=model_name(MODEL),
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": user_message},

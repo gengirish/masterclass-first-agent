@@ -11,13 +11,13 @@ import sys
 from typing import Any
 
 from dotenv import load_dotenv
-from openai import OpenAI
 
+from .llm import make_client, model_name
 from .tools import TOOLS, dispatch_tool
 
 load_dotenv()
 
-MODEL = os.environ.get("MODEL", "gpt-4o-mini")
+MODEL = os.environ.get("MODEL", "openai/gpt-4o-mini")
 SYSTEM_PROMPT = (
     "You are a careful research assistant. "
     "Think step by step. When a question requires a calculation or a web "
@@ -29,7 +29,7 @@ SYSTEM_PROMPT = (
 
 def run_agent(user_message: str, max_iterations: int = 6) -> str:
     """Run the agent loop until it returns a final answer or budget runs out."""
-    client = OpenAI()
+    client = make_client(MODEL)
 
     # TODO 1 - initialize messages with the system prompt and the user's question.
     # Hint: messages is a list of dicts. Each dict has a "role" and "content" key.
@@ -39,7 +39,7 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
         print(f"\n--- iteration {iteration + 1} ---")
 
         # TODO 2 - call the LLM with the tools registered.
-        # Hint: client.chat.completions.create(model=..., messages=..., tools=TOOLS, tool_choice="auto")
+        # Hint: client.chat.completions.create(model=model_name(MODEL), messages=..., tools=TOOLS, tool_choice="auto")
         response = ...  # replace this
 
         choice = response.choices[0].message

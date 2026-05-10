@@ -22,15 +22,15 @@ from typing import Any
 
 import chromadb
 from dotenv import load_dotenv
-from openai import OpenAI
 from pypdf import PdfReader
 
+from .llm import embed, make_client, model_name
 from .tools import TOOLS, dispatch_tool
 
 load_dotenv()
 
-MODEL = os.environ.get("MODEL", "gpt-4o-mini")
-EMBED_MODEL = os.environ.get("EMBED_MODEL", "text-embedding-3-small")
+MODEL = os.environ.get("MODEL", "openai/gpt-4o-mini")
+EMBED_MODEL = os.environ.get("EMBED_MODEL", "openai/text-embedding-3-small")
 COLLECTION_NAME = "intelliforge-docs"
 CHROMA_DIR = Path(".chroma")
 
@@ -74,9 +74,8 @@ def ingest_pdf(doc_path: Path) -> int:
     chunks = chunk_text(full_text)
     print(f"  -> {len(chunks)} chunks")
 
-    client = OpenAI()
-    embeddings_response = client.embeddings.create(model=EMBED_MODEL, input=chunks)
-    vectors = [e.embedding for e in embeddings_response.data]
+    client = make_client(EMBED_MODEL)
+    vectors = embed(client, EMBED_MODEL, chunks, kind="passage")
 
     chroma = chromadb.PersistentClient(path=str(CHROMA_DIR))
     collection = chroma.get_or_create_collection(COLLECTION_NAME)
@@ -97,7 +96,7 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
     """Run the RAG-augmented agent loop. Same shape as Step 1."""
     import json
 
-    client = OpenAI()
+    client = make_client(MODEL)
     messages: list[dict[str, Any]] = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": user_message},
@@ -107,7 +106,7 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
         print(f"\n--- iteration {iteration + 1} ---")
 
         response = client.chat.completions.create(
-            model=MODEL,
+            model=model_name(MODEL),
             messages=messages,
             tools=TOOLS,
             tool_choice="auto",

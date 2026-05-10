@@ -10,8 +10,10 @@ dumb agent. Specific description, smart agent.
 from __future__ import annotations
 
 import json
+import os
 from typing import Any
 
+import httpx
 from simpleeval import simple_eval
 
 
@@ -29,10 +31,48 @@ def calculator(expression: str) -> str:
 
 
 def web_search(query: str) -> str:
-    """Stub web search. Replace with a real provider (Tavily, Serper, Bing) later.
+    """Search the web via Tavily.
 
-    For the masterclass we keep this offline so we don't need extra API keys.
+    Falls back to a tiny canned dataset when ``TAVILY_API_KEY`` is missing,
+    so the masterclass agent still demonstrates tool calling without
+    requiring every learner to register for Tavily.
     """
+    api_key = os.environ.get("TAVILY_API_KEY")
+    if not api_key:
+        return _canned_web_search(query)
+
+    try:
+        response = httpx.post(
+            "https://api.tavily.com/search",
+            json={
+                "api_key": api_key,
+                "query": query,
+                "search_depth": "basic",
+                "max_results": 3,
+                "include_answer": True,
+            },
+            timeout=15.0,
+        )
+        response.raise_for_status()
+        data = response.json()
+    except Exception as exc:
+        return f"ERROR: Tavily request failed: {exc}"
+
+    parts: list[str] = []
+    answer = data.get("answer")
+    if answer:
+        parts.append(f"[tavily summary]\n{answer}")
+    for i, hit in enumerate((data.get("results") or [])[:3], start=1):
+        title = hit.get("title", "(no title)")
+        url = hit.get("url", "")
+        snippet = (hit.get("content") or "").strip()
+        parts.append(f"[result {i}] {title}\n{url}\n{snippet}")
+
+    return "\n\n".join(parts) or f"No Tavily results for '{query}'."
+
+
+def _canned_web_search(query: str) -> str:
+    """Offline fallback used when ``TAVILY_API_KEY`` is not set."""
     canned = {
         "openai": "OpenAI is an AI research company. ChatGPT was launched in Nov 2022.",
         "intelliforge": "IntelliForge is an AI engineering bootcamp run by Girish Hiremath.",
@@ -44,7 +84,7 @@ def web_search(query: str) -> str:
             return f"[stub web result for '{query}']\n{value}"
     return (
         f"[stub web result for '{query}']\n"
-        "No canned result found. In production, plug in Tavily / Serper / Bing here."
+        "No canned result found. Set TAVILY_API_KEY in .env for real web search."
     )
 
 
@@ -55,14 +95,12 @@ def search_docs(query: str, k: int = 3) -> str:
     `python -m scripts.ingest` first to populate the Chroma collection.
     """
     import chromadb
-    from openai import OpenAI
 
-    client = OpenAI()
-    embedding = (
-        client.embeddings.create(model="text-embedding-3-small", input=[query])
-        .data[0]
-        .embedding
-    )
+    from .llm import embed, make_client
+
+    embed_model = os.environ.get("EMBED_MODEL", "openai/text-embedding-3-small")
+    client = make_client(embed_model)
+    embedding = embed(client, embed_model, [query], kind="query")[0]
 
     chroma = chromadb.PersistentClient(path=".chroma")
     try:
