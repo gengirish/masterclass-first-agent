@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+:root {
+  /* Slate-900 / 800 / 700 base — gives developer-tool identity vs generic neutral. */
+  --background: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #334155;
+  --foreground: #f8fafc;
+  --foreground-muted: rgba(248, 250, 252, 0.62);
+  --foreground-faint: rgba(248, 250, 252, 0.4);
+  --border: rgba(248, 250, 252, 0.1);
+  --border-strong: rgba(248, 250, 252, 0.22);
+  /* Accents: green for ready/answered, amber for warming, red for errors. */
+  --accent-ready: #22c55e;
+  --accent-warming: #fbbf24;
+  --accent-error: #f87171;
+  /* Focus ring color — translucent foreground for the dark canvas. */
+  --focus-ring: rgba(248, 250, 252, 0.45);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-faint: var(--foreground-faint);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent-ready: var(--accent-ready);
+  --color-accent-warming: var(--accent-warming);
+  --color-accent-error: var(--accent-error);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-jetbrains-mono);
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Explicit focus rings — Tailwind preflight removes default outlines. */
+:where(button, a, textarea, input, [role="button"]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px var(--background), 0 0 0 3px var(--focus-ring);
+  border-radius: 6px;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reveal {
+  animation: reveal 500ms ease-out both;
+}
+
+.pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* Honor reduced-motion preferences. Keeps content visible, kills movement. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal,
+  .pulse-soft,
+  .spin-slow {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Markdown content styling for the answer card */
+.markdown {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+.markdown > * + * {
+  margin-top: 1rem;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-top: 1.5rem;
+}
+.markdown h1 { font-size: 1.25rem; }
+.markdown h2 { font-size: 1.1rem; }
+.markdown h3 { font-size: 1rem; }
+.markdown strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.markdown code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.85em;
+  background: var(--surface-2);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+.markdown pre {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+.markdown pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+.markdown ul,
+.markdown ol {
+  padding-left: 1.5rem;
+}
+.markdown ul { list-style: disc; }
+.markdown ol { list-style: decimal; }
+.markdown li + li {
+  margin-top: 0.4rem;
+}
+.markdown a {
+  color: var(--foreground);
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms ease;
+}
+.markdown a:hover {
+  text-decoration-color: var(--foreground);
+}
+.markdown blockquote {
+  border-left: 2px solid var(--border-strong);
+  padding-left: 1rem;
+  color: var(--foreground-muted);
+  font-style: italic;
+}
