@@ -19,6 +19,9 @@ telecom, and IoT. He runs IntelliForge's live product studio (25+ deployed produ
 and counting), holds an M.Tech in Data Science & AI, and teaches from production
 systems he ships — not slide decks.
 
+Girish's background also includes IF-RES research (published AI upskill roadmaps) and
+an Anthropic partner path for enterprise AI engineering practice.
+
 IntelliForge is a venture studio and enterprise AI engineering practice, not a
 content factory. Key differentiators vs. recorded courses and university certificates:
 
@@ -71,20 +74,37 @@ Graduates can share verified wins at **share.intelliforge.tech**.
 
 ### 12-Week Bootcamp (Cohort 1)
 
+- **Cohort 1 start date:** 01 August 2026
 - **Duration:** 12 weeks
-- **Live sessions:** Saturdays and Sundays, 4–5 hours per day (IST), on Zoom
+- **Live sessions:** Saturdays and Sundays, on Zoom — **two sessions per day** (see
+  schedule below)
 - **Async project work:** 5–8 additional hours during the week
 - **Total time commitment:** approximately 15–18 hours per week
 - **Delivery:** Live weekend cohort sessions with founder mentorship; recordings and
   materials on learning.intelliforge.tech (lifetime access, including future updates)
 - **Language:** English (sessions)
 
-### 2-Week AI Sprint (gateway track)
+### Live class schedule (Cohort 1)
+
+Classes run live on Zoom every Saturday and Sunday. Pick your timezone on the website;
+anchor times are IST:
+
+| Session | Days | Time (IST) |
+|---------|------|------------|
+| Morning live class | Saturday & Sunday | 9:00 AM – 11:00 AM |
+| Evening live class | Saturday & Sunday | 8:00 PM – 10:00 PM |
+
+PST / EST / CET on the website reflect daylight saving for August 2026. Zoom links
+are shared in the **UpSkill-Cohort-01 WhatsApp group** after enrollment.
+
+### 2-Week AI Sprint (gateway track — primary entry point)
 
 - **Duration:** 2 weeks
+- **Price:** ₹4,999 (list price ₹12,999)
 - **Live sessions:** Saturdays and Sundays (IST), on Zoom
-- **Outcome:** Two AI products deployed to production
-- **Purpose:** Gateway to the full 12-week bootcamp
+- **Outcome:** Two AI products deployed to production in 14 days
+- **Purpose:** Gateway to the full 12-week bootcamp; recommended starting point on
+  upskill.intelliforge.tech
 
 ## Pricing
 
@@ -112,7 +132,8 @@ All prices in ₹ (INR).
 - Two AI products deployed to production
 - Gateway to the 12-week bootcamp
 
-**Payment options:** Secure checkout; 0% EMI available at checkout.
+**Payment options:** Secure Razorpay checkout — UPI, credit/debit cards, and
+netbanking. 0% EMI available at checkout for the 12-week bootcamp.
 
 **Refund policy:** 15-day money-back guarantee. If you attend the first two weekends
 and feel the bootcamp is not right for you, you receive a full refund.
@@ -246,19 +267,30 @@ Cohort 1 learner outcomes (shipped-product links, mentor scores, verification UR
 will be published on the website as graduates complete the program. IntelliForge does
 not fabricate learner testimonials before Cohort 1 ships.
 
+**Enterprise client quotes** (B2B services, not bootcamp graduate outcomes) on the
+website include testimonials from Rahul M. (CTO, SaaS Startup), Priya S. (Head of
+Research, Analytics Firm), Vikram K. (Founder, Fintech Company), and Suresh P.
+(VP Engineering, Enterprise SaaS) about IntelliForge's client delivery work.
+
 ## Your path through IntelliForge
 
-1. **Try the free demo** — watch a live session, no signup
-2. **Enrol in Cohort 1** — 12-week bootcamp or 2-week sprint
-3. **Share your verified win** — graduates post shipped-product links at
+The recommended funnel on upskill.intelliforge.tech:
+
+1. **Try the free demo** — watch a live session, no signup, no payment
+2. **Join the 2-Week AI Sprint** — ₹4,999, two products shipped in 14 days
+3. **Scale into the 12-week bootcamp** — build-alongside, mentor scoring, verifiable
+   credential (₹49,999 Cohort 1 early bird)
+4. **Share your verified win** — graduates post shipped-product links at
    share.intelliforge.tech
 
 ## Support during the bootcamp
 
-- **Live sessions:** Saturdays and Sundays, 4–5 hours per day (IST), on Zoom
+- **Live sessions:** Saturdays and Sundays — morning (9–11 AM IST) and evening
+  (8–10 PM IST) on Zoom
+- **Zoom links:** Shared in the UpSkill-Cohort-01 WhatsApp group after enrollment
 - **Founder mentorship:** Direct mentorship from Girish (Cohort 1 early bird)
 - **Learning platform:** learning.intelliforge.tech — recordings, materials, lifetime access
-- **Community:** Lifetime community membership
+- **Community:** Lifetime community membership; WhatsApp group for cohort communication
 - **Advisor call:** Free 15-minute advisor call available — book for clarity, no pressure
 
 ## Contact
@@ -270,6 +302,8 @@ not fabricate learner testimonials before Cohort 1 ships.
 - **Learning platform:** learning.intelliforge.tech
 - **Credential verification:** certs.intelliforge.tech
 - **Graduate wins:** share.intelliforge.tech
+- **Cohort WhatsApp:** UpSkill-Cohort-01 group (link shared after enrollment)
+- **Live Zoom:** Link shared in cohort WhatsApp after enrollment
 
 Response time: email within 24 hours; WhatsApp for faster replies.
 
@@ -297,9 +331,17 @@ have a general understanding of APIs. We start from LLM fundamentals in Week 1 a
 progressively build to advanced multi-agent systems.
 
 **Q: What's the time commitment?**
-A: Live sessions on Saturdays and Sundays (4–5 hours per day IST). Plan for an
-additional 5–8 hours of project work during the week. Total: approximately 15–18
-hours per week for 12 weeks.
+A: Live sessions are on Saturdays and Sundays — morning (9–11 AM IST) and evening
+(8–10 PM IST), plus 5–8 hours of project work during the week. Total: approximately
+15–18 hours per week for 12 weeks. The 2-Week Sprint follows the same weekend live
+format over 14 days.
+
+**Q: When does Cohort 1 start?**
+A: Cohort 1 kicks off on 01 August 2026. Classes run live on Zoom every weekend.
+
+**Q: How do I pay?**
+A: Secure Razorpay checkout on upskill.intelliforge.tech — UPI, credit/debit cards,
+and netbanking. The 12-week bootcamp also offers 0% EMI at checkout.
 
 **Q: What's the difference between the 2-Week Sprint and 12-Week Bootcamp?**
 A: The 2-Week Sprint (₹4,999) is a focused gateway — two products deployed in
