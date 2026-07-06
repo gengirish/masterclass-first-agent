@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ask, AgentRequestError, AskResponse } from "@/lib/api";
-import { UPSKILL_SAMPLES, type SampleQuestion } from "@/lib/samples";
+import { type SampleQuestion } from "@/lib/samples";
 import { QuestionInput } from "./QuestionInput";
 import { AnswerCard } from "./AnswerCard";
 import { ColdStartIndicator } from "./ColdStartIndicator";
@@ -24,7 +24,7 @@ type Props = {
 
 export function ChatInterface({ variant = "full", samples }: Props) {
   const compact = variant === "embed";
-  const resolvedSamples = samples ?? (compact ? UPSKILL_SAMPLES : undefined);
+  const resolvedSamples = compact ? undefined : samples;
 
   const [draft, setDraft] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -77,11 +77,51 @@ export function ChatInterface({ variant = "full", samples }: Props) {
     void submit(q);
   };
 
+  if (compact) {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col">
+        <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+          {status === "asking" && (
+            <ColdStartIndicator active startedAt={requestStartedAt} compact />
+          )}
+
+          {status === "error" && error && (
+            <p role="alert" className="text-sm text-accent-error">
+              {error}
+            </p>
+          )}
+
+          {result && (
+            <AnswerCard
+              question={result.question}
+              answer={result.answer}
+              durationMs={result.durationMs}
+              compact
+            />
+          )}
+        </div>
+
+        <div className="flex-shrink-0 border-t border-border px-3 py-2.5">
+          <QuestionInput
+            value={draft}
+            onChange={setDraft}
+            onSubmit={() => void submit()}
+            onCancel={() => abortRef.current?.abort()}
+            busy={status === "asking"}
+            compact
+            placeholder="Ask a question\u2026"
+            autoFocus={false}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={compact ? "flex w-full flex-col gap-4" : "flex w-full flex-col gap-8"}>
+    <div className="flex w-full flex-col gap-8">
       <div className="flex items-center justify-between gap-3">
         <p className="font-display text-[11px] uppercase tracking-[0.18em] text-foreground-faint">
-          {compact ? "Bootcamp assistant" : "/ask \u2014 live agent"}
+          /ask &mdash; live agent
         </p>
         <StatusDot status={status} />
       </div>
@@ -92,21 +132,15 @@ export function ChatInterface({ variant = "full", samples }: Props) {
         onSubmit={() => void submit()}
         onCancel={() => abortRef.current?.abort()}
         busy={status === "asking"}
-        compact={compact}
-        placeholder={
-          compact
-            ? "Ask about pricing, curriculum, build-alongside\u2026"
-            : undefined
-        }
-        autoFocus={!compact}
       />
 
-      <SampleQuestions
-        onPick={handleSamplePick}
-        disabled={status === "asking"}
-        samples={resolvedSamples}
-        compact={compact}
-      />
+      {resolvedSamples && (
+        <SampleQuestions
+          onPick={handleSamplePick}
+          disabled={status === "asking"}
+          samples={resolvedSamples}
+        />
+      )}
 
       {status === "asking" && (
         <ColdStartIndicator active startedAt={requestStartedAt} />
@@ -121,9 +155,7 @@ export function ChatInterface({ variant = "full", samples }: Props) {
             className="mt-1.5 inline-block h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent-error"
             aria-hidden
           />
-          <div className="flex-1 font-mono text-sm text-foreground">
-            {error}
-          </div>
+          <div className="flex-1 font-mono text-sm text-foreground">{error}</div>
         </div>
       )}
 
@@ -132,7 +164,6 @@ export function ChatInterface({ variant = "full", samples }: Props) {
           question={result.question}
           answer={result.answer}
           durationMs={result.durationMs}
-          compact={compact}
         />
       )}
     </div>

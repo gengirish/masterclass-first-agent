@@ -215,6 +215,3 @@ button:disabled {
 .embed-header {
   background: var(--surface);
 }
-.embed-footer a {
-  transition: color 150ms ease;
-}

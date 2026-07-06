@@ -42,6 +42,54 @@ export function QuestionInput({
     }
   };
 
+  if (compact) {
+    return (
+      <form onSubmit={handleSubmit} className="flex items-end gap-2">
+        <label htmlFor="question" className="sr-only">
+          Ask the agent a question
+        </label>
+        <textarea
+          ref={textareaRef}
+          id="question"
+          name="question"
+          rows={1}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={busy}
+          placeholder={placeholder}
+          className={clsx(
+            "min-h-[36px] flex-1 resize-none rounded-md border border-border bg-surface px-3 py-2",
+            "text-sm text-foreground placeholder:text-foreground-faint",
+            "focus:border-border-strong focus:outline-none disabled:opacity-50",
+          )}
+          autoFocus={autoFocus}
+        />
+        {busy && onCancel ? (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="flex-shrink-0 rounded-md px-2 py-2 text-xs text-foreground-muted hover:text-foreground"
+          >
+            Stop
+          </button>
+        ) : (
+          <button
+            type="submit"
+            disabled={busy || !value.trim()}
+            className={clsx(
+              "flex-shrink-0 rounded-md bg-accent-ready px-3 py-2 text-sm font-medium text-background",
+              "disabled:cursor-not-allowed disabled:opacity-30",
+              "hover:bg-accent-ready/90",
+            )}
+          >
+            Send
+          </button>
+        )}
+      </form>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="w-full">
       <div
@@ -57,7 +105,7 @@ export function QuestionInput({
           ref={textareaRef}
           id="question"
           name="question"
-          rows={compact ? 2 : 3}
+          rows={3}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -67,18 +115,12 @@ export function QuestionInput({
             "w-full resize-none bg-transparent text-foreground",
             "placeholder:text-foreground-faint",
             "focus:outline-none disabled:opacity-50",
-            "font-sans leading-relaxed",
-            compact ? "px-3 py-3 text-sm" : "px-4 py-4 text-base",
+            "px-4 py-4 text-base font-sans leading-relaxed",
           )}
           autoFocus={autoFocus}
         />
         <div className="flex items-center justify-between gap-3 border-t border-border px-3 py-2">
-          <kbd
-            className={clsx(
-              "hidden sm:inline-flex font-display text-[10px] uppercase tracking-[0.16em] text-foreground-faint",
-              compact && "!hidden",
-            )}
-          >
+          <kbd className="hidden sm:inline-flex font-display text-[10px] uppercase tracking-[0.16em] text-foreground-faint">
             <span>Enter</span>
             <span className="mx-1.5 text-foreground-faint/50">to send</span>
             <span>Shift+Enter</span>
