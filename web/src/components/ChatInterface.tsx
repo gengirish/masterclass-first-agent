@@ -87,7 +87,7 @@ export function ChatInterface({ variant = "full", samples }: Props) {
           {showSamples && !result && (
             <SampleQuestions
               onPick={handleSamplePick}
-              disabled={status === "asking"}
+              disabled={false}
               samples={resolvedSamples}
               compact
             />
@@ -116,7 +116,7 @@ export function ChatInterface({ variant = "full", samples }: Props) {
             <div className="mt-4 border-t border-border pt-4">
               <SampleQuestions
                 onPick={handleSamplePick}
-                disabled={status === "asking"}
+                disabled={false}
                 samples={resolvedSamples}
                 compact
               />
