@@ -3,6 +3,9 @@
 $ErrorActionPreference = "Stop"
 Set-Location (Split-Path $PSScriptRoot -Parent)
 
+Write-Host "==> Preflight checks..."
+uv run python -m scripts.preflight
+
 Write-Host "==> Ingesting data/ into Chroma..."
 uv run python -m scripts.ingest
 

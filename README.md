@@ -136,6 +136,19 @@ curl -X POST http://localhost:8000/ask ^
 ### Step 4 - deploy to Fly.io
 
 ```bash
+# Preflight (checks data/, .chroma/, API keys)
+uv run python -m scripts.preflight
+
+# Or use the all-in-one script (preflight → ingest → deploy):
+# Windows:
+.\scripts\deploy-fly.ps1
+# macOS / Linux:
+./scripts/deploy-fly.sh
+```
+
+Manual steps if you prefer:
+
+```bash
 # 1. Install fly CLI (one-time)
 #    Windows (PowerShell): iwr https://fly.io/install.ps1 -useb | iex
 #    macOS / Linux:        curl -L https://fly.io/install.sh | sh

@@ -15,6 +15,7 @@ If you get stuck, peek at `reference/solutions/agent_v2_rag.py`.
 """
 from __future__ import annotations
 
+import logging
 import os
 import sys
 from pathlib import Path
@@ -26,6 +27,8 @@ from pypdf import PdfReader
 
 from .llm import embed, make_client, model_name
 from .tools import TOOLS, dispatch_tool
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -92,10 +95,15 @@ def ingest_pdf(doc_path: Path) -> int:
 # Re-export run_agent for `python -m src.agent_v2_rag "..."` and the FastAPI server.
 # The skeleton intentionally re-implements it here so students see the same loop
 # from Step 1 but with the doc-grounded SYSTEM_PROMPT.
+def _agent_verbose() -> bool:
+    return os.environ.get("AGENT_VERBOSE", "").lower() in {"1", "true", "yes"}
+
+
 def run_agent(user_message: str, max_iterations: int = 6) -> str:
     """Run the RAG-augmented agent loop. Same shape as Step 1."""
     import json
 
+    verbose = _agent_verbose()
     client = make_client(MODEL)
     messages: list[dict[str, Any]] = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -103,7 +111,10 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
     ]
 
     for iteration in range(max_iterations):
-        print(f"\n--- iteration {iteration + 1} ---")
+        if verbose:
+            print(f"\n--- iteration {iteration + 1} ---")
+        else:
+            logger.debug("agent iteration %s", iteration + 1)
 
         response = client.chat.completions.create(
             model=model_name(MODEL),
@@ -118,10 +129,14 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
             for tool_call in choice.tool_calls:
                 name = tool_call.function.name
                 args = json.loads(tool_call.function.arguments)
-                print(f"  -> tool: {name}({args})")
+                if verbose:
+                    print(f"  -> tool: {name}({args})")
+                else:
+                    logger.debug("tool call: %s", name)
                 result = dispatch_tool(name, args)
-                preview = result[:120] + ("..." if len(result) > 120 else "")
-                print(f"  <- result: {preview}")
+                if verbose:
+                    preview = result[:120] + ("..." if len(result) > 120 else "")
+                    print(f"  <- result: {preview}")
                 messages.append(
                     {
                         "role": "tool",
@@ -138,8 +153,10 @@ def run_agent(user_message: str, max_iterations: int = 6) -> str:
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     question = (
         " ".join(sys.argv[1:])
         or "How long is the IntelliForge bootcamp and what does it cost?"
     )
+    os.environ.setdefault("AGENT_VERBOSE", "1")
     print("\nFINAL ANSWER:\n", run_agent(question))

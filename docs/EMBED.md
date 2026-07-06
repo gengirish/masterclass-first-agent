@@ -220,3 +220,8 @@ uv run python -m scripts.ingest
 # Frontend (widget + embed.js)
 cd web && vercel --prod
 ```
+
+**Production notes:**
+- Fly keeps 1 machine warm (`min_machines_running = 1`) to avoid ~30s cold starts.
+- `GET /health` verifies the Chroma index is mounted before serving `/ask`.
+- Set `NEXT_PUBLIC_AGENT_BASE_URL` on Vercel (see `web/.env.example`).

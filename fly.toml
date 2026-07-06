@@ -12,14 +12,22 @@ primary_region = "bom"
   LLM_DEFAULT_PROVIDER = "openrouter"
   MODEL = "openai/gpt-4o-mini"
   EMBED_MODEL = "openai/text-embedding-3-small"
+  LOG_LEVEL = "INFO"
 
 [http_service]
   internal_port = 8080
   force_https = true
   auto_stop_machines = "stop"
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "45s"
+    interval = "30s"
+    method = "GET"
+    path = "/health"
+    timeout = "10s"
 
 [[vm]]
   size = "shared-cpu-1x"
