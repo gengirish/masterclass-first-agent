@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ask, AgentRequestError, AskResponse } from "@/lib/api";
-import { type SampleQuestion } from "@/lib/samples";
+import { DEMO_SAMPLES, UPSKILL_SAMPLES, type SampleQuestion } from "@/lib/samples";
 import { QuestionInput } from "./QuestionInput";
 import { AnswerCard } from "./AnswerCard";
 import { ColdStartIndicator } from "./ColdStartIndicator";
@@ -24,7 +24,8 @@ type Props = {
 
 export function ChatInterface({ variant = "full", samples }: Props) {
   const compact = variant === "embed";
-  const resolvedSamples = compact ? undefined : samples;
+  const resolvedSamples =
+    samples ?? (compact ? UPSKILL_SAMPLES : DEMO_SAMPLES);
 
   const [draft, setDraft] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -78,9 +79,20 @@ export function ChatInterface({ variant = "full", samples }: Props) {
   };
 
   if (compact) {
+    const showSamples = status !== "asking";
+
     return (
       <div className="flex min-h-0 flex-1 flex-col">
         <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+          {showSamples && !result && (
+            <SampleQuestions
+              onPick={handleSamplePick}
+              disabled={status === "asking"}
+              samples={resolvedSamples}
+              compact
+            />
+          )}
+
           {status === "asking" && (
             <ColdStartIndicator active startedAt={requestStartedAt} compact />
           )}
@@ -99,6 +111,17 @@ export function ChatInterface({ variant = "full", samples }: Props) {
               compact
             />
           )}
+
+          {showSamples && result && (
+            <div className="mt-4 border-t border-border pt-4">
+              <SampleQuestions
+                onPick={handleSamplePick}
+                disabled={status === "asking"}
+                samples={resolvedSamples}
+                compact
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex-shrink-0 border-t border-border px-3 py-2.5">
@@ -109,7 +132,7 @@ export function ChatInterface({ variant = "full", samples }: Props) {
             onCancel={() => abortRef.current?.abort()}
             busy={status === "asking"}
             compact
-            placeholder="Ask a question\u2026"
+            placeholder="Ask about start date, sprint, timings\u2026"
             autoFocus={false}
           />
         </div>
@@ -134,7 +157,7 @@ export function ChatInterface({ variant = "full", samples }: Props) {
         busy={status === "asking"}
       />
 
-      {resolvedSamples && (
+      {resolvedSamples.length > 0 && (
         <SampleQuestions
           onPick={handleSamplePick}
           disabled={status === "asking"}
