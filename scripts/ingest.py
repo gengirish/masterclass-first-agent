@@ -4,8 +4,8 @@ Run locally before testing:
 
     uv run python -m scripts.ingest
 
-In production, `deploy/Dockerfile` runs this at **image build time** so Chroma
-is populated before the Fly machine ever serves /ask.
+In production, run `scripts/deploy-fly` before `fly deploy` — it ingests
+**before** the Docker image builds so Chroma is ready when the app starts.
 """
 from __future__ import annotations
 

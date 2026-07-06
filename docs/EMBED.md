@@ -213,8 +213,9 @@ Prefer the script tag approach — it includes the launcher button and open/clos
 # Re-ingest FAQ if data/intelliforge-faq.md changed (local dev)
 uv run python -m scripts.ingest
 
-# Backend — ingest runs automatically during `fly deploy` (build-time secret)
-fly deploy
+# Backend — ingest runs first via scripts/deploy-fly (embeddings baked into image)
+./scripts/deploy-fly.sh
+# or on Windows: .\scripts\deploy-fly.ps1
 
 # Frontend (widget + embed.js)
 cd web && vercel --prod

@@ -19,11 +19,9 @@ COPY src ./src
 COPY scripts ./scripts
 COPY data ./data
 
-# Embed FAQ into Chroma at image build time — not on first /ask request.
-# OPENROUTER_API_KEY is supplied via Fly build secrets (see fly.toml).
-RUN --mount=type=secret,id=OPENROUTER_API_KEY \
-    OPENROUTER_API_KEY="$(cat /run/secrets/OPENROUTER_API_KEY)" \
-    .venv/bin/python -m scripts.ingest
+# Pre-built at deploy time — run `scripts/deploy-fly` before `fly deploy` so
+# Chroma is indexed before the image builds; /ask never waits on ingestion.
+COPY .chroma ./.chroma
 
 ENV PORT=8080
 EXPOSE 8080

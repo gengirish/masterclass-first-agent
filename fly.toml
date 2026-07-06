@@ -7,7 +7,6 @@ primary_region = "bom"
 
 [build]
   dockerfile = "deploy/Dockerfile"
-  build-secret = "OPENROUTER_API_KEY"
 
 [env]
   LLM_DEFAULT_PROVIDER = "openrouter"
