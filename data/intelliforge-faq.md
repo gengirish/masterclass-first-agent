@@ -5,6 +5,51 @@ Every answer the agent gives about the bootcamp should be grounded in this file.
 
 Official website: https://upskill.intelliforge.tech/
 
+**Default recommendation:** Start with the **2-Week AI Sprint** (₹4,999) — the
+low-risk entry point on upskill.intelliforge.tech. Ship two products in 14 days, then
+scale into the 12-week bootcamp when you are ready.
+
+---
+
+## Start here — most asked
+
+**Q: When does Cohort 1 start?**
+A: **01 August 2026.** Live classes run every Saturday and Sunday on Zoom. Zoom links
+are shared in the UpSkill-Cohort-01 WhatsApp group after you enroll.
+
+**Q: How long is each track?**
+A:
+- **2-Week AI Sprint (recommended start):** 14 calendar days — two AI products deployed
+  to production. Price ₹4,999.
+- **12-Week Bootcamp:** 12 weeks — full curriculum, build-alongside eligibility,
+  mentor scoring, and verifiable credential. Cohort 1 early bird ₹49,999.
+
+**Q: What are the live class timings?**
+A: Every **Saturday and Sunday** on Zoom (IST anchor times):
+
+| Session | Time (IST) |
+|---------|------------|
+| Morning live class | 9:00 AM – 11:00 AM |
+| Evening live class | 8:00 PM – 10:00 PM |
+
+You can attend one or both sessions. Plan for an additional 5–8 hours of project work
+during the week (12-week track). The website shows equivalent times in PST, EST, CET,
+GMT, SGT, and GST.
+
+**Q: Why start with the 2-Week AI Sprint? (default option)**
+A: The 2-Week Sprint is the **recommended entry point** on upskill.intelliforge.tech:
+
+- **Low risk:** ₹4,999 vs ₹49,999+ for the full bootcamp
+- **Fast proof:** Two AI products shipped to production in 14 days — not slides
+- **Same live format:** Weekend Zoom sessions with founder-taught cohort (Sat & Sun)
+- **Gateway:** Natural path into the 12-week bootcamp once you have shipped and seen
+  how we teach
+- **Try before you scale:** Pair with the free live demo (no signup) if you want a
+  preview before paying
+
+Most visitors should **Join the 2-Week AI Sprint** first, then upgrade to the
+12-week bootcamp. Payment via secure Razorpay — UPI, cards, and netbanking.
+
 ---
 
 ## About IntelliForge
@@ -97,14 +142,23 @@ anchor times are IST:
 PST / EST / CET on the website reflect daylight saving for August 2026. Zoom links
 are shared in the **UpSkill-Cohort-01 WhatsApp group** after enrollment.
 
-### 2-Week AI Sprint (gateway track — primary entry point)
+### 2-Week AI Sprint (gateway track — **default / recommended start**)
 
-- **Duration:** 2 weeks
+- **Duration:** 2 weeks (14 calendar days)
 - **Price:** ₹4,999 (list price ₹12,999)
-- **Live sessions:** Saturdays and Sundays (IST), on Zoom
+- **Live sessions:** Saturdays and Sundays (IST), on Zoom — same morning (9–11 AM) and
+  evening (8–10 PM) slots as the 12-week cohort
 - **Outcome:** Two AI products deployed to production in 14 days
-- **Purpose:** Gateway to the full 12-week bootcamp; recommended starting point on
-  upskill.intelliforge.tech
+- **Purpose:** **Default entry point** on upskill.intelliforge.tech — low-risk way to
+  experience live teaching, ship real products, then scale into the 12-week bootcamp
+
+**Why the sprint is the default option:**
+
+1. Ship two production deployments before committing to 12 weeks
+2. ₹4,999 entry vs ₹49,999 early bird for the full program
+3. Same founder-taught weekend live format as the full bootcamp
+4. Proves fit before the larger time and money commitment
+5. Secure Razorpay checkout — UPI, cards, netbanking
 
 ## Pricing
 
@@ -309,6 +363,24 @@ Response time: email within 24 hours; WhatsApp for faster replies.
 
 ## Common questions
 
+**Q: When does Cohort 1 start?**
+A: **01 August 2026.** Live classes run every Saturday and Sunday on Zoom.
+
+**Q: How long is the program?**
+A: The **2-Week AI Sprint** is 14 days (two products shipped). The **12-Week Bootcamp**
+is 12 weeks (~15–18 hours per week including weekend live sessions and weekday
+project work).
+
+**Q: What are the class timings?**
+A: Morning **9:00–11:00 AM IST** and evening **8:00–10:00 PM IST**, every Saturday
+and Sunday. Zoom links go to the UpSkill-Cohort-01 WhatsApp group after enrollment.
+
+**Q: Should I start with the 2-Week Sprint?**
+A: **Yes — it is the default recommendation.** At ₹4,999 you ship two products in 14
+days with live weekend classes, then decide whether to continue to the 12-week
+bootcamp (₹49,999 early bird). Most new learners on upskill.intelliforge.tech should
+start here.
+
 **Q: What makes IntelliForge different from other AI bootcamps?**
 A: Most bootcamps hand you a portfolio project and a certificate of attendance. We
 staff top performers on real IntelliForge products — you ship to a live repo, get
@@ -333,21 +405,18 @@ progressively build to advanced multi-agent systems.
 **Q: What's the time commitment?**
 A: Live sessions are on Saturdays and Sundays — morning (9–11 AM IST) and evening
 (8–10 PM IST), plus 5–8 hours of project work during the week. Total: approximately
-15–18 hours per week for 12 weeks. The 2-Week Sprint follows the same weekend live
-format over 14 days.
-
-**Q: When does Cohort 1 start?**
-A: Cohort 1 kicks off on 01 August 2026. Classes run live on Zoom every weekend.
+15–18 hours per week for 12 weeks. The 2-Week Sprint uses the same weekend live
+format over 14 days with a lighter weekday load focused on shipping two products.
 
 **Q: How do I pay?**
 A: Secure Razorpay checkout on upskill.intelliforge.tech — UPI, credit/debit cards,
 and netbanking. The 12-week bootcamp also offers 0% EMI at checkout.
 
 **Q: What's the difference between the 2-Week Sprint and 12-Week Bootcamp?**
-A: The 2-Week Sprint (₹4,999) is a focused gateway — two products deployed in
-14 days. The 12-Week Bootcamp (₹49,999 Cohort 1 early bird) is the full path with
-build-alongside eligibility, mentor scoring, and a verifiable credential. Start
-with the free live demo to see which fits.
+A: The 2-Week Sprint (₹4,999) is the **default starting point** — two products
+deployed in 14 days with live weekend classes. The 12-Week Bootcamp (₹49,999 Cohort 1
+early bird) is the full path with build-alongside eligibility, mentor scoring, and a
+verifiable credential. **Start with the sprint**, then scale up when ready.
 
 **Q: Is there a money-back guarantee?**
 A: Yes — 15-day money-back guarantee. If you attend the first two weekends and feel

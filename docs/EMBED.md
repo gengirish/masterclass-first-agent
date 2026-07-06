@@ -210,10 +210,10 @@ Prefer the script tag approach — it includes the launcher button and open/clos
 ## Redeploy after changes
 
 ```bash
-# Re-ingest FAQ if data/intelliforge-faq.md changed
+# Re-ingest FAQ if data/intelliforge-faq.md changed (local dev)
 uv run python -m scripts.ingest
 
-# Backend (includes updated .chroma at build time)
+# Backend — ingest runs automatically during `fly deploy` (build-time secret)
 fly deploy
 
 # Frontend (widget + embed.js)

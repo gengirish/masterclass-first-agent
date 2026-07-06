@@ -29,23 +29,23 @@ export const DEMO_SAMPLES: SampleQuestion[] = [
 
 export const UPSKILL_SAMPLES: SampleQuestion[] = [
   {
-    label: "Pricing",
-    question: "What does the 12-week IntelliForge bootcamp cost?",
+    label: "When does it start?",
+    question: "When does Cohort 1 start?",
     tag: "FAQ",
   },
   {
-    label: "Build-alongside",
-    question: "What is build-alongside and who qualifies?",
+    label: "2-Week Sprint",
+    question: "What is the 2-Week AI Sprint and why is it the recommended starting point?",
     tag: "FAQ",
   },
   {
-    label: "Credential",
-    question: "What is the verifiable credential and how do recruiters check it?",
+    label: "Class timings",
+    question: "What are the live class timings on weekends?",
     tag: "FAQ",
   },
   {
-    label: "Time commitment",
-    question: "How many hours per week does the bootcamp require?",
+    label: "Duration",
+    question: "How long is the 2-Week Sprint compared to the 12-week bootcamp?",
     tag: "FAQ",
   },
 ];

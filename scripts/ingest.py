@@ -1,8 +1,11 @@
 """One-shot ingest: read every doc under data/ and embed it into ChromaDB.
 
-Run once before using `agent_v2_rag.py` or hitting `/ask` on the server.
+Run locally before testing:
 
     uv run python -m scripts.ingest
+
+In production, `deploy/Dockerfile` runs this at **image build time** so Chroma
+is populated before the Fly machine ever serves /ask.
 """
 from __future__ import annotations
 

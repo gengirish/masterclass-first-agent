@@ -2,7 +2,10 @@ FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    LLM_DEFAULT_PROVIDER=openrouter \
+    MODEL=openai/gpt-4o-mini \
+    EMBED_MODEL=openai/text-embedding-3-small
 
 WORKDIR /app
 
@@ -15,7 +18,12 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY src ./src
 COPY scripts ./scripts
 COPY data ./data
-COPY .chroma ./.chroma
+
+# Embed FAQ into Chroma at image build time — not on first /ask request.
+# OPENROUTER_API_KEY is supplied via Fly build secrets (see fly.toml).
+RUN --mount=type=secret,id=OPENROUTER_API_KEY \
+    OPENROUTER_API_KEY="$(cat /run/secrets/OPENROUTER_API_KEY)" \
+    .venv/bin/python -m scripts.ingest
 
 ENV PORT=8080
 EXPOSE 8080
