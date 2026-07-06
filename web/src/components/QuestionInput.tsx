@@ -9,9 +9,21 @@ type Props = {
   onSubmit: () => void;
   busy: boolean;
   onCancel?: () => void;
+  compact?: boolean;
+  placeholder?: string;
+  autoFocus?: boolean;
 };
 
-export function QuestionInput({ value, onChange, onSubmit, busy, onCancel }: Props) {
+export function QuestionInput({
+  value,
+  onChange,
+  onSubmit,
+  busy,
+  onCancel,
+  compact = false,
+  placeholder = "Ask anything about the IntelliForge bootcamp\u2014or any quick fact.",
+  autoFocus = true,
+}: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: FormEvent) => {
@@ -45,22 +57,28 @@ export function QuestionInput({ value, onChange, onSubmit, busy, onCancel }: Pro
           ref={textareaRef}
           id="question"
           name="question"
-          rows={3}
+          rows={compact ? 2 : 3}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
           disabled={busy}
-          placeholder="Ask anything about the IntelliForge bootcamp\u2014or any quick fact."
+          placeholder={placeholder}
           className={clsx(
-            "w-full resize-none bg-transparent px-4 py-4 text-base text-foreground",
+            "w-full resize-none bg-transparent text-foreground",
             "placeholder:text-foreground-faint",
             "focus:outline-none disabled:opacity-50",
             "font-sans leading-relaxed",
+            compact ? "px-3 py-3 text-sm" : "px-4 py-4 text-base",
           )}
-          autoFocus
+          autoFocus={autoFocus}
         />
         <div className="flex items-center justify-between gap-3 border-t border-border px-3 py-2">
-          <kbd className="hidden sm:inline-flex font-display text-[10px] uppercase tracking-[0.16em] text-foreground-faint">
+          <kbd
+            className={clsx(
+              "hidden sm:inline-flex font-display text-[10px] uppercase tracking-[0.16em] text-foreground-faint",
+              compact && "!hidden",
+            )}
+          >
             <span>Enter</span>
             <span className="mx-1.5 text-foreground-faint/50">to send</span>
             <span>Shift+Enter</span>

@@ -5,31 +5,38 @@ type Props = {
   question: string;
   answer: string;
   durationMs: number;
+  compact?: boolean;
 };
 
-export function AnswerCard({ question, answer, durationMs }: Props) {
+export function AnswerCard({ question, answer, durationMs, compact = false }: Props) {
   const seconds = (durationMs / 1000).toFixed(1);
 
   return (
-    <article className="reveal flex flex-col gap-4">
-      <div className="flex items-baseline justify-between gap-4 border-b border-border pb-3">
+    <article className={compact ? "reveal flex flex-col gap-3" : "reveal flex flex-col gap-4"}>
+      <div className="flex items-baseline justify-between gap-4 border-b border-border pb-2">
         <h2 className="font-display text-[10px] uppercase tracking-[0.18em] text-foreground-faint">
           Question
         </h2>
         <span className="font-display text-[10px] uppercase tracking-[0.14em] text-foreground-faint tabular-nums">
-          answered in {seconds}s
+          {seconds}s
         </span>
       </div>
-      <p className="font-sans text-lg leading-relaxed text-foreground">
+      <p
+        className={
+          compact
+            ? "font-sans text-sm leading-relaxed text-foreground"
+            : "font-sans text-lg leading-relaxed text-foreground"
+        }
+      >
         {question}
       </p>
 
-      <div className="mt-4 flex items-baseline gap-3 border-b border-border pb-3">
+      <div className="mt-2 flex items-baseline gap-3 border-b border-border pb-2">
         <h2 className="font-display text-[10px] uppercase tracking-[0.18em] text-foreground-faint">
           Answer
         </h2>
       </div>
-      <div className="markdown">
+      <div className={compact ? "markdown markdown-compact" : "markdown"}>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{answer}</ReactMarkdown>
       </div>
     </article>

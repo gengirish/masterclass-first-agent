@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ask, AgentRequestError, AskResponse } from "@/lib/api";
+import { UPSKILL_SAMPLES, type SampleQuestion } from "@/lib/samples";
 import { QuestionInput } from "./QuestionInput";
 import { AnswerCard } from "./AnswerCard";
 import { ColdStartIndicator } from "./ColdStartIndicator";
@@ -16,7 +17,15 @@ type Result = {
   durationMs: number;
 };
 
-export function ChatInterface() {
+type Props = {
+  variant?: "full" | "embed";
+  samples?: SampleQuestion[];
+};
+
+export function ChatInterface({ variant = "full", samples }: Props) {
+  const compact = variant === "embed";
+  const resolvedSamples = samples ?? (compact ? UPSKILL_SAMPLES : undefined);
+
   const [draft, setDraft] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [result, setResult] = useState<Result | null>(null);
@@ -69,10 +78,10 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex w-full flex-col gap-8">
+    <div className={compact ? "flex w-full flex-col gap-4" : "flex w-full flex-col gap-8"}>
       <div className="flex items-center justify-between gap-3">
         <p className="font-display text-[11px] uppercase tracking-[0.18em] text-foreground-faint">
-          /ask &mdash; live agent
+          {compact ? "Bootcamp assistant" : "/ask \u2014 live agent"}
         </p>
         <StatusDot status={status} />
       </div>
@@ -83,9 +92,21 @@ export function ChatInterface() {
         onSubmit={() => void submit()}
         onCancel={() => abortRef.current?.abort()}
         busy={status === "asking"}
+        compact={compact}
+        placeholder={
+          compact
+            ? "Ask about pricing, curriculum, build-alongside\u2026"
+            : undefined
+        }
+        autoFocus={!compact}
       />
 
-      <SampleQuestions onPick={handleSamplePick} disabled={status === "asking"} />
+      <SampleQuestions
+        onPick={handleSamplePick}
+        disabled={status === "asking"}
+        samples={resolvedSamples}
+        compact={compact}
+      />
 
       {status === "asking" && (
         <ColdStartIndicator active startedAt={requestStartedAt} />
@@ -111,6 +132,7 @@ export function ChatInterface() {
           question={result.question}
           answer={result.answer}
           durationMs={result.durationMs}
+          compact={compact}
         />
       )}
     </div>

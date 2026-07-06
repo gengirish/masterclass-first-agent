@@ -1,44 +1,26 @@
 "use client";
 
 import clsx from "clsx";
-
-const SAMPLES = [
-  {
-    label: "Bootcamp duration & cost",
-    question: "How long is the IntelliForge bootcamp and what does it cost?",
-    tag: "RAG",
-  },
-  {
-    label: "Placement assistance",
-    question: "Do you offer placement assistance after the bootcamp?",
-    tag: "RAG",
-  },
-  {
-    label: "Quick math",
-    question: "What is 17% of 4,829?",
-    tag: "calculator",
-  },
-  {
-    label: "Live web search",
-    question: "What is OpenRouter and how does it differ from the OpenAI API?",
-    tag: "tavily",
-  },
-] as const;
+import { DEMO_SAMPLES, type SampleQuestion } from "@/lib/samples";
 
 export function SampleQuestions({
   onPick,
   disabled,
+  samples = DEMO_SAMPLES,
+  compact = false,
 }: {
   onPick: (q: string) => void;
   disabled: boolean;
+  samples?: SampleQuestion[];
+  compact?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className={clsx("flex flex-col", compact ? "gap-2" : "gap-3")}>
       <p className="font-display text-[10px] uppercase tracking-[0.18em] text-foreground-faint">
         Try
       </p>
       <div className="flex flex-wrap gap-2">
-        {SAMPLES.map((s) => (
+        {samples.map((s) => (
           <button
             key={s.question}
             type="button"

@@ -196,3 +196,25 @@ button:disabled {
   color: var(--foreground-muted);
   font-style: italic;
 }
+
+.markdown-compact {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.markdown-compact > * + * {
+  margin-top: 0.75rem;
+}
+
+/* Embed shell — full-height panel for iframe */
+.embed-page {
+  margin: 0;
+}
+.embed-shell {
+  height: 100%;
+}
+.embed-header {
+  background: var(--surface);
+}
+.embed-footer a {
+  transition: color 150ms ease;
+}
