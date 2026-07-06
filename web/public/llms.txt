@@ -1,0 +1,50 @@
+# IntelliForge Bootcamp Assistant
+
+> Embeddable RAG chat widget for upskill.intelliforge.tech — add one script tag to any IntelliForge site; do not rebuild the chat UI.
+
+This project ships a pre-built bootcamp FAQ assistant: a Next.js widget frontend on Vercel and a FastAPI agent backend on Fly.io. Integration is **embed-only** for consumer sites like upskill.intelliforge.tech.
+
+Primary integration target: https://upskill.intelliforge.tech/
+
+Agents integrating this widget should read [llms-full.txt](https://masterclass-first-agent.vercel.app/llms-full.txt) first. It contains copy-paste snippets, CSP/CORS rules, verification steps, and out-of-scope boundaries.
+
+## Live endpoints
+
+- [Widget loader (embed.js)](https://masterclass-first-agent.vercel.app/embed.js): Script tag entry point; injects launcher + iframe panel.
+- [Embed panel (/embed)](https://masterclass-first-agent.vercel.app/embed): Iframe content; framed by upskill and *.intelliforge.tech.
+- [Agent API (POST /ask)](https://masterclass-first-agent.fly.dev/ask): JSON Q&A backend; called by the widget, not by the host site directly.
+- [API health (GET /)](https://masterclass-first-agent.fly.dev/): Returns `{"status":"ok"}` when the Fly machine is warm.
+- [Demo UI](https://masterclass-first-agent.vercel.app/): Full-page chat demo (not for embedding).
+
+## Integration (quick)
+
+Preferred — add before `</body>` on the host site:
+
+```html
+<script
+  src="https://masterclass-first-agent.vercel.app/embed.js"
+  data-position="bottom-right"
+  defer
+></script>
+```
+
+Optional attributes: `data-position` (`bottom-right` | `bottom-left`), `data-base` (widget origin override).
+
+## Documentation
+
+- [Full integration spec (llms-full.txt)](https://masterclass-first-agent.vercel.app/llms-full.txt): Complete agent-oriented guide — fetch this for implementation.
+- [Human-readable embed guide](https://github.com/gengirish/masterclass-first-agent/blob/main/docs/EMBED.md): Same content as Markdown in the repo.
+- [Bootcamp FAQ knowledge base](https://github.com/gengirish/masterclass-first-agent/blob/main/data/intelliforge-faq.md): Ground-truth doc the agent retrieves via RAG.
+
+## API contract
+
+- `POST https://masterclass-first-agent.fly.dev/ask`
+- Request: `{"question": "string", "max_iterations": 4}`
+- Response: `{"question": "string", "answer": "string"}`
+- CORS: allowed for `https://upskill.intelliforge.tech`, `https://*.intelliforge.tech`, and the Vercel widget origin.
+
+## Optional
+
+- [GitHub repository](https://github.com/gengirish/masterclass-first-agent): Source code; modifying this repo is out of scope for upskill integration tasks.
+- [Masterclass README](https://github.com/gengirish/masterclass-first-agent/blob/main/README.md): How to run and develop the agent locally.
+- [llm.txt alias](https://masterclass-first-agent.vercel.app/llm.txt): Compatibility copy of this index file.

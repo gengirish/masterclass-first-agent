@@ -16,6 +16,12 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+- **Embed panel:** [http://localhost:3000/embed](http://localhost:3000/embed)
+- **Embed guide:** [../docs/EMBED.md](../docs/EMBED.md)
+- **Agent docs:** [http://localhost:3000/llms.txt](http://localhost:3000/llms.txt) · [llms-full.txt](http://localhost:3000/llms-full.txt)
+
+Canonical sources live at the repo root (`llms.txt`, `llms-full.txt`); copies in `public/` are served in production.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

@@ -1,0 +1,248 @@
+# IntelliForge Bootcamp Assistant — Integration Spec
+
+> Machine-readable integration guide for embedding the bootcamp FAQ chat widget on upskill.intelliforge.tech or any `*.intelliforge.tech` site.
+
+## Purpose
+
+Add a floating chat assistant to a marketing site. The assistant answers questions about the IntelliForge AI Bootcamp (pricing, curriculum, build-alongside, credential, time commitment) using RAG over `intelliforge-faq.md`.
+
+**Integration model:** Host site loads a third-party script. The script renders a launcher button and iframe panel. The iframe calls a remote API. The host site does **not** implement chat UI, RAG, or LLM calls.
+
+**Primary consumer:** https://upskill.intelliforge.tech/
+
+---
+
+## Architecture
+
+```
+Host site (e.g. upskill.intelliforge.tech)
+  └── <script src=".../embed.js">          ← you add this only
+        └── launcher button (fixed, bottom corner)
+        └── iframe → widget-host/embed     ← chat panel UI
+              └── fetch → fly.dev/ask      ← agent API (automatic)
+```
+
+| Layer | URL | Role |
+|-------|-----|------|
+| Widget loader | https://masterclass-first-agent.vercel.app/embed.js | Injects UI into host page |
+| Embed panel | https://masterclass-first-agent.vercel.app/embed | Compact chat inside iframe |
+| Agent API | https://masterclass-first-agent.fly.dev | FastAPI `POST /ask` |
+| Knowledge | ChromaDB in Fly image | Ingested from `data/intelliforge-faq.md` at deploy |
+
+---
+
+## Step 1 — Add the script tag (preferred)
+
+Place once in the global layout or HTML shell (every page):
+
+```html
+<script
+  src="https://masterclass-first-agent.vercel.app/embed.js"
+  data-position="bottom-right"
+  defer
+></script>
+```
+
+### Script behavior
+
+1. Creates `#if-chat-launcher` — green circular button, fixed bottom-right (z-index ~2147483646).
+2. Creates `#if-chat-panel` — hidden container with iframe (z-index ~2147483645).
+3. Click launcher → panel opens, iframe loads `https://masterclass-first-agent.vercel.app/embed`.
+4. User closes panel → iframe posts `postMessage("intelliforge-chat-close", "*")` → panel hides.
+5. Mobile: panel expands to ~85vh from bottom; launcher stays visible.
+
+### Script attributes
+
+| Attribute | Values | Default |
+|-----------|--------|---------|
+| `data-position` | `bottom-right`, `bottom-left` | `bottom-right` |
+| `data-base` | Full widget origin, e.g. `https://masterclass-first-agent.vercel.app` | Derived from script `src` |
+
+Example — left side:
+
+```html
+<script
+  src="https://masterclass-first-agent.vercel.app/embed.js"
+  data-position="bottom-left"
+  defer
+></script>
+```
+
+---
+
+## Step 2 — Alternative: direct iframe
+
+Use only if CSP blocks third-party scripts. You lose the launcher; the iframe is always visible.
+
+```html
+<iframe
+  src="https://masterclass-first-agent.vercel.app/embed"
+  title="IntelliForge Bootcamp Assistant"
+  style="position:fixed;bottom:24px;right:24px;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100dvh - 120px));border:none;border-radius:14px;z-index:9999;box-shadow:0 20px 60px rgba(0,0,0,.45)"
+  allow="clipboard-write"
+></iframe>
+```
+
+Prefer the script tag — it includes open/close behavior.
+
+---
+
+## Step 3 — Host-site requirements
+
+### Content Security Policy
+
+Ensure the host CSP allows:
+
+- `script-src`: `https://masterclass-first-agent.vercel.app` (for embed.js)
+- `frame-src` or `child-src`: `https://masterclass-first-agent.vercel.app` (for /embed iframe)
+
+The widget host already allows framing **from** upskill via `frame-ancestors` on `/embed`:
+
+```
+frame-ancestors 'self' https://upskill.intelliforge.tech https://*.intelliforge.tech
+```
+
+### Z-index
+
+Do not place other fixed bottom-right CTAs in the same corner. The launcher uses z-index ~2147483645.
+
+### Next.js host example
+
+In `app/layout.tsx`:
+
+```tsx
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <script
+          src="https://masterclass-first-agent.vercel.app/embed.js"
+          data-position="bottom-right"
+          defer
+        />
+      </body>
+    </html>
+  );
+}
+```
+
+Or use `next/script` with `strategy="lazyOnload"`.
+
+---
+
+## API reference (informational — widget calls this, not the host)
+
+### Health check
+
+```
+GET https://masterclass-first-agent.fly.dev/
+→ 200 {"status":"ok","service":"my-first-agent"}
+```
+
+### Ask
+
+```
+POST https://masterclass-first-agent.fly.dev/ask
+Content-Type: application/json
+
+{"question": "What does the 12-week bootcamp cost?", "max_iterations": 4}
+
+→ 200 {"question":"...","answer":"..."}
+```
+
+- `max_iterations` optional, default 4.
+- Single-turn Q&A per submit (no server-side chat history).
+- First request after idle may take ~30s (Fly.io cold start in Mumbai). Widget shows a warming indicator.
+
+### CORS
+
+Allowed origins include:
+
+- `https://upskill.intelliforge.tech`
+- `https://*.intelliforge.tech` (regex)
+- `https://masterclass-first-agent.vercel.app`
+- `http://localhost:3000` (dev)
+
+Extra origins: set `CORS_ALLOWED_ORIGINS` env on Fly (comma-separated).
+
+---
+
+## Verification checklist
+
+After integrating on the host site:
+
+1. [ ] Green launcher visible bottom-right (or bottom-left if configured).
+2. [ ] Click opens chat panel with "Bootcamp Assistant" header.
+3. [ ] Sample question "What does the 12-week bootcamp cost?" returns an answer.
+4. [ ] Close (X) button collapses the panel.
+5. [ ] No CSP console errors for script or frame.
+6. [ ] Mobile: panel usable without obscuring critical nav.
+
+---
+
+## In scope vs out of scope
+
+### In scope (host-site integration)
+
+- Add `embed.js` script tag to global layout.
+- Fix CSP / z-index conflicts on the host site.
+- Verify widget on preview and production.
+
+### Out of scope (do not do on host site)
+
+- Rebuild chat UI components.
+- Call `/ask` directly from host-site code (widget handles this).
+- Modify masterclass-first-agent repo during upskill integration.
+- Re-implement RAG, Chroma, or LLM provider routing.
+
+### Out of scope (widget/backend repo — separate task)
+
+- Update FAQ content → edit `data/intelliforge-faq.md`, run ingest, redeploy Fly.
+- Eliminate cold start → set `min_machines_running = 1` in `fly.toml`.
+- Multi-turn chat history, streaming responses, rate limiting.
+
+---
+
+## Redeploy (widget/backend maintainers only)
+
+```bash
+# After FAQ changes
+uv run python -m scripts.ingest
+
+# Backend (bundles .chroma into Docker image)
+fly deploy
+
+# Frontend (embed.js + /embed route)
+cd web && vercel --prod
+```
+
+---
+
+## Source files (masterclass-first-agent repo)
+
+| Path | Purpose |
+|------|---------|
+| `web/public/embed.js` | Script-tag loader |
+| `web/src/app/embed/page.tsx` | Embed route |
+| `web/src/components/EmbedPanel.tsx` | Panel shell + close postMessage |
+| `web/src/components/ChatInterface.tsx` | Chat UI (`variant="embed"`) |
+| `web/next.config.ts` | `frame-ancestors` CSP |
+| `src/server.py` | FastAPI + CORS |
+| `data/intelliforge-faq.md` | RAG knowledge base |
+| `docs/EMBED.md` | Human-readable duplicate of this spec |
+
+---
+
+## Contact
+
+- Bootcamp site: https://upskill.intelliforge.tech/
+- WhatsApp: https://wa.me/918555960837
+- Email: contact@intelliforge.tech
+
+---
+
+## Index
+
+- Short index: https://masterclass-first-agent.vercel.app/llms.txt
+- This file: https://masterclass-first-agent.vercel.app/llms-full.txt

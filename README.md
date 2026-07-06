@@ -159,6 +159,28 @@ curl https://<your-app-name>.fly.dev/
 
 ---
 
+## Embed on upskill.intelliforge.tech
+
+The Next.js UI in `web/` includes an embeddable chat widget for the IntelliForge bootcamp site.
+
+| Doc | Path / URL |
+|-----|------------|
+| Human guide | [docs/EMBED.md](docs/EMBED.md) |
+| Agent index | [llms.txt](llms.txt) · https://masterclass-first-agent.vercel.app/llms.txt |
+| Agent full spec | [llms-full.txt](llms-full.txt) · https://masterclass-first-agent.vercel.app/llms-full.txt |
+
+Quick embed snippet:
+
+```html
+<script
+  src="https://masterclass-first-agent.vercel.app/embed.js"
+  data-position="bottom-right"
+  defer
+></script>
+```
+
+---
+
 ## Troubleshooting
 
 | Symptom | Fix |
